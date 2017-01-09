@@ -1,4 +1,8 @@
 
+--harmony-async-await es7 async await 参数
+linux,在文件/home/用户名/.bashrc(没有这个文件的话新建)中把这句话加上alias node='node --harmony'
+或者每次刚刚启动控制台的时候执行这条命令
+pm2 --node-args='--harmony-async-await' start xxx
 
 密码加密实例
 1、生成随机数$salt=179243，最终会和加密后的密文一同入库。

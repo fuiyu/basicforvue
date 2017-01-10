@@ -36,3 +36,9 @@ async function sleep(timeout) {
   await sleep(3000);
   console.log('Do other things, ' + new Date());
 })();
+
+class mysqlbase{
+    constructor(){
+        
+    }
+}

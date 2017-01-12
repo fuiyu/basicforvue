@@ -1,44 +1,56 @@
-const mysql = require("mysql")
-var conn = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '7569823',
-    port: 3306
-});
-conn.connect();
-async function connectDatbase(query){
-    return new Promise((resolve,reject)=>{
-        conn.query(query, function(err, rows, fields) {
-            if (err) console.log(err) ;
-                 console.log('The solution is: ', rows);
-                 resolve()
+class MysqlModel {
+    init(conn, table) {
+        this.conn = conn;
+        this.table = table;
+    }
+    
+    async create(obj) {
+            return new Promise((resolve, reject) => {
+                this.conn.query(`insert into ${this.table}`, obj, function(err, result) {
+                    if (err) reject(err);
+                    resolve(result);
+                    connection.release();
+                });
+            })
+        }
+        // 
+    async get(obj) {
+        var query = `select * from  ${this.table} where `;
+        var _container = []
+        for (var prop in obj) {
+            _container.push(prop + '=' + obj[prop])
+        }
+
+        query += _container.join(' and ')
+
+        return new Promise((resolve, reject) => {
+            this.conn.query(query, function(err, rows, fields) {
+                if (err) reject(err);
+                resolve(rows)
+                connection.release();
             });
-    })
-}
-async function commit(){
-    console.log('执行数据库')
-    await connectDatbase('SELECT 1 + 1 AS solution')
-    console.log("执行完毕")
-}
-commit()
-conn.end();
+        })
+    }
 
-async function sleep(timeout) {
-  return new Promise((resolve, reject) => {
-    setTimeout(function() {
-      resolve();
-    }, timeout);
-  });
-}
 
-(async function() {
-  console.log('Do some thing, ' + new Date());
-  await sleep(3000);
-  console.log('Do other things, ' + new Date());
-})();
+    async update(id, obj) {
+        return new Promise((resolve, reject) => {
+            this.conn.query(`update users set password="ddd" where name="zhangsan"`, obj, function(err, result) {
+                if (err) reject(err);
+                resolve(result);
+                connection.release();
+            });
+        })
+    }
 
-class mysqlbase{
-    constructor(){
-        
+    async del(query, obj) {
+        return new Promise((resolve, reject) => {
+            this.conn.query(query, obj, function(err, result) {
+                if (err) reject(err);
+                resolve(result);
+                connection.release();
+            });
+        })
     }
 }
+module.exports = MysqlModel

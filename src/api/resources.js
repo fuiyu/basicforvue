@@ -9,7 +9,7 @@ Vue.http.options.credentials = true
 
 exports.login = function(){
 console.log(1)
-Vue.resource('/user/login')
+Vue.resource('/user/register')
     
 }
     

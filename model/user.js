@@ -1,6 +1,6 @@
-const mysqlModel = require('./mysqlbase')
+const MysqlModel = require('./mysqlbase')
 
-class UserModel extends mysqlModel{
+class UserModel extends MysqlModel{
     init(conn, table) {
         this.conn = conn;
         this.table = table;

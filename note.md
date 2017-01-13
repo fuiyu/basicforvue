@@ -16,3 +16,11 @@ var content = 'password'
 var md5 = crypto.createHash('md5');
 md5.update(content);
 var sign = md5.digest('hex');
+
+
+一般说来，在Web安全领域，常见的攻击方式大概有以下几种：
+1、SQL注入攻击
+2、跨站脚本攻击 - XSS
+3、跨站伪造请求攻击 - CSRF
+4、文件上传漏洞攻击
+5、分布式拒绝服务攻击 - DDOS

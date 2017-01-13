@@ -1,9 +1,9 @@
 const mysql = require("mysql")
 // const mysqlBase = require('./mysqlbase.js')
-const userModel = require('./user')
+const UserModel = require('./user')
 const dbConfig = require("../config/db.config.js")
 const conn = mysql.createPool(dbConfig);
+console.log(dbConfig)
 
-exports.user = new userModel()
-
+exports.user = new UserModel()
 exports.user.init(conn,'user')

@@ -2,7 +2,7 @@
     <form class="bs-example bs-example-form" role="form">
     <div class="input-group">
       <span class="input-group-addon">用户名</span>
-      <input v-model="user.username"  type="text" name="username" class="form-control" placeholder="Username">
+      <input v-model="user.name"  type="text" name="name" class="form-control" placeholder="Username">
     </div>
     <div class="input-group">
       <span class="input-group-addon">密码</span>
@@ -17,7 +17,7 @@
         data () {
             return {
                 user: {
-                    username:'',
+                    name:'',
                     password:''
                 }
             }
@@ -25,10 +25,11 @@
         methods: {
             ok () {
 
-                this.$http.post('/user/login',this.user).then((response)=>{
-                     if(response.ok){
-                    location = '/'
-                }
+                this.$http.post('/user/register',this.user).then((response)=>{
+                //      if(response.ok){
+                //     location = '/'
+                // }
+                alert(response)
                 }
                )
                 

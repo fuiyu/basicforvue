@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
 import App from './App.vue'
-import Home from './components/Home'
+import Home from './components/home'
 import TimeEntries from './components/TimeEntries'
 import '../assets/bootstrap/css/bootstrap.css'
 

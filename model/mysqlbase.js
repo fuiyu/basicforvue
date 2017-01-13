@@ -1,3 +1,13 @@
+// function getConnection(conn) {
+//     return new Promise((resolve, reject) => {
+
+//         conn.getConnection(function (err, connection) {
+//             if (err) reject(err);
+//             resolve(connection);
+//         });
+//     })
+// }
+
 class MysqlModel {
     init(conn, table) {
         this.conn = conn;
@@ -5,15 +15,17 @@ class MysqlModel {
     }
     
     async create(obj) {
-            return new Promise((resolve, reject) => {
-                this.conn.query(`insert into ${this.table}`, obj, function(err, result) {
-                    if (err) reject(err);
-                    resolve(result);
-                    connection.release();
-                });
-            })
-        }
-        // 
+        var _self = this;
+        return new Promise(async(resolve, reject) => {
+            var connection = await _self.getConnection(_self.conn)
+            connection.query(`insert into ${_self.table} SET ?`, obj, function (err, result) {
+                if (err) reject(err);
+                connection.release();
+                resolve(result);
+            });
+        })
+    }
+    
     async get(obj) {
         var query = `select * from  ${this.table} where `;
         var _container = []
@@ -23,8 +35,9 @@ class MysqlModel {
 
         query += _container.join(' and ')
 
-        return new Promise((resolve, reject) => {
-            this.conn.query(query, function(err, rows, fields) {
+        return new Promise(async(resolve, reject) => {
+            var connection = await _self.getConnection(_self.conn)
+            connection.query(query, function (err, rows, fields) {
                 if (err) reject(err);
                 resolve(rows)
                 connection.release();
@@ -33,9 +46,24 @@ class MysqlModel {
     }
 
 
-    async update(id, obj) {
+    // async update(id, obj) {
+    //     var _container = [],query=''
+    //     for (var prop in id) {
+    //         _container.push(prop + '=' + id[prop])
+    //     }
+    //     query += _container.join(' and ')
+    //     return new Promise((resolve, reject) => {
+    //         this.conn.query(`update users set password="ddd" where name="zhangsan"`, obj, function (err, result) {
+    //             if (err) reject(err);
+    //             resolve(result);
+    //             connection.release();
+    //         });
+    //     })
+    // }
+
+    async del(query, obj) {
         return new Promise((resolve, reject) => {
-            this.conn.query(`update users set password="ddd" where name="zhangsan"`, obj, function(err, result) {
+            this.conn.query(query, obj, function (err, result) {
                 if (err) reject(err);
                 resolve(result);
                 connection.release();
@@ -43,12 +71,12 @@ class MysqlModel {
         })
     }
 
-    async del(query, obj) {
+    async getConnection(conn) {
         return new Promise((resolve, reject) => {
-            this.conn.query(query, obj, function(err, result) {
+
+            conn.getConnection(function (err, connection) {
                 if (err) reject(err);
-                resolve(result);
-                connection.release();
+                resolve(connection);
             });
         })
     }

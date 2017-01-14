@@ -1,16 +1,5 @@
-const userModel = require("./model").user
+const Md5Secret = require("./utils/md5secret.js")
 
-console.log(userModel)
-var result = userModel.create({'name':'fuiyu','password':'123'})
-// class Foo {
-//     async bar() {
-//         return Promise.resolve(1)
-//     }
-    
-// }
-
-// const foo = new Foo();
-// (async function(){    
-//         const bar = await foo.bar()
-//         console.log(bar)
-// } )()
+const md5secret = new Md5Secret()
+md5secret.init('7569823','fuiyu')
+md5secret.md5()

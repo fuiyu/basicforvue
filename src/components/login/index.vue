@@ -25,11 +25,11 @@
         methods: {
             ok () {
 
-                this.$http.post('/user/register',this.user).then((response)=>{
+                this.$http.post('/user/login',this.user).then((response)=>{
                 //      if(response.ok){
                 //     location = '/'
                 // }
-                alert(response)
+                console.log(response)
                 }
                )
                 

@@ -7,7 +7,8 @@ class UserModel extends MysqlModel{
     }
 
     async getIdByNickName(name){
-        const obj = await this.get({name:nickname})
+        const obj = await this.get({"name":name})
+        
         return obj 
     }
 }

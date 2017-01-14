@@ -1,13 +1,3 @@
-// function getConnection(conn) {
-//     return new Promise((resolve, reject) => {
-
-//         conn.getConnection(function (err, connection) {
-//             if (err) reject(err);
-//             resolve(connection);
-//         });
-//     })
-// }
-
 class MysqlModel {
     init(conn, table) {
         this.conn = conn;
@@ -32,15 +22,16 @@ class MysqlModel {
         for (var prop in obj) {
             _container.push(prop + '=' + obj[prop])
         }
-
         query += _container.join(' and ')
-
+        console.log(query)
+        var _self = this;
         return new Promise(async(resolve, reject) => {
             var connection = await _self.getConnection(_self.conn)
             connection.query(query, function (err, rows, fields) {
                 if (err) reject(err);
-                resolve(rows)
                 connection.release();
+                resolve(rows)
+                
             });
         })
     }
@@ -61,9 +52,11 @@ class MysqlModel {
     //     })
     // }
 
-    async del(query, obj) {
-        return new Promise((resolve, reject) => {
-            this.conn.query(query, obj, function (err, result) {
+    async del(obj) {
+         var _self = this;
+        return new Promise(async(resolve, reject) => {
+            var connection = await _self.getConnection(_self.conn)
+            connection.query(query, obj, function (err, result) {
                 if (err) reject(err);
                 resolve(result);
                 connection.release();
@@ -71,9 +64,9 @@ class MysqlModel {
         })
     }
 
-    async getConnection(conn) {
+    getConnection(conn) {
+         var _self = this;
         return new Promise((resolve, reject) => {
-
             conn.getConnection(function (err, connection) {
                 if (err) reject(err);
                 resolve(connection);

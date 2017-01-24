@@ -1,12 +1,11 @@
 class ToJson {
 
     spliceToJSON(data = {}, message = '', code = '') {
-        return JSON.stringify({
+        return {
             data,
             message,
             code
-        })
-
+        }
     }
 }
 

@@ -38,7 +38,8 @@ const router = new VueRouter({
 
 /* eslint-disable no-new */
 // 实例化我们的Vue
-var app = new Vue({
+// 将vue实例全局化
+window.vm = new Vue({
   el: '#app',
   router,
   store,

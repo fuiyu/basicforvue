@@ -55,3 +55,21 @@ code 定义：
 6用户错误 6001 未登录
 ---------------------------------------
 遗留问题：websocket转化cookie的问题，与sessionid没有保持一致，需要做字符串操作
+
+
+---------------------------------------
+vue 目录结构
+├── index.html
+├── main.js
+├── api
+│   └── ... # 抽取出API请求
+├── components
+│   ├── App.vue
+│   └── ...
+└── store
+    ├── index.js          # 我们组装模块并导出 store 的地方
+    ├── actions.js        # 根级别的 action
+    ├── mutations.js      # 根级别的 mutation
+    └── modules
+        ├── cart.js       # 购物车模块
+        └── products.js   # 产品模

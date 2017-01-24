@@ -4,6 +4,8 @@ const Md5Secret = require("../utils/md5secret.js")
 // const app = express();
 const router = express.Router();
 var md5secret = new Md5Secret();
+const ToJson = require('../utils/toJson.js')
+const toJson = new ToJson()
 
 
 router.post("/login", async(req, res) => {
@@ -25,12 +27,33 @@ router.post("/login", async(req, res) => {
             req.session.username = RowDataPacket.name
             var resResult = {};
             resResult.name = RowDataPacket.name
-            res.send(resResult)
+            res.send(toJson.spliceToJSON(resResult,"登录成功",0))
         } else {
-            res.send("用户名或者密码错误")
+            res.send(toJson.spliceToJSON('',"用户名或者密码错误",6002))
         }
     }
 
+});
+
+router.get("/getinfo", async(req, res) => {
+    //     var body = 
+    //   req.session.userid = 'fuiyu'
+    var name = req.session.username
+    
+    if (name) {
+        var result = await userModel.get({
+            'name': name 
+        })
+        var RowDataPacket = result[0]
+        if (RowDataPacket) {
+            // req.session.username= RowDataPacket.name
+            res.send(toJson.spliceToJSON({name:RowDataPacket.name},"查询成功",0))
+        } else {
+            res.send(toJson.spliceToJSON('',"未登录",6001))
+        }
+    }else {
+            res.send(toJson.spliceToJSON('',"未登录",6001))
+    }
 });
 router.get("/chklogin", async(req, res) => {
     //     var body = 

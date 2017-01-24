@@ -2,9 +2,7 @@
   <div id="wrapper">
     <indexHeader></indexHeader>
     <div class="container">
-      <div class="col-sm-12">
         <router-view></router-view>
-      </div>
     </div>
     <indexFooter></indexFooter>
   </div>

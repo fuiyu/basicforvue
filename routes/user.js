@@ -3,7 +3,7 @@ const userModel = require("../model").user
 const Md5Secret = require("../utils/md5secret.js")
 // const app = express();
 const router = express.Router();
-var md5secret = new Md5Secret()
+var md5secret = new Md5Secret();
 
 
 router.post("/login", async(req, res) => {
@@ -15,19 +15,45 @@ router.post("/login", async(req, res) => {
     if (!!password) {
         md5secret.init(password, 'fuiyu')
         var md5Password = md5secret.md5()
-        req.session.username = name
+        
         // var result = await userModel.getIdByNickName(name)
-        var result = await userModel.get({'password':"'"+md5Password+"'"})
-        console.log(result)
-        res.send(result)
+        var result = await userModel.get({
+            'password':  md5Password 
+        })
+        var RowDataPacket = result[0]
+        if (RowDataPacket) {
+            req.session.username = RowDataPacket.name
+            var resResult = {};
+            resResult.name = RowDataPacket.name
+            res.send(resResult)
+        } else {
+            res.send("用户名或者密码错误")
+        }
     }
 
 });
-router.post("/chklogin", async(req, res) => {
+router.get("/chklogin", async(req, res) => {
     //     var body = 
     //   req.session.userid = 'fuiyu'
-
-    res.send(req.session.username)
+    var name = req.session.username
+    
+    if (name) {
+        var result = await userModel.get({
+            'name': name 
+        })
+        var RowDataPacket = result[0]
+        if (RowDataPacket) {
+            // req.session.username= RowDataPacket.name
+            var resResult = {};
+            resResult.code = 0;
+            resResult.status = "已登录"
+            res.send(resResult)
+        } else {
+            res.send("未登录")
+        }
+    }else {
+            res.send("未登录")
+    }
 });
 
 router.post("/register", async(req, res) => {
@@ -39,10 +65,14 @@ router.post("/register", async(req, res) => {
         var md5Password = md5secret.md5()
         body.password = md5Password
         var result = await userModel.create(body)
-        console.log(result)
         res.send(result)
-    }
+    } 
 
+});
+
+router.get("/logout", async(req, res) => {
+    req.session.username = null
+    req.redirect('/#/login')
 });
 // router.post("/getuserid", function(req, res) {
 //   // res.session.userid = 'fuiyu'

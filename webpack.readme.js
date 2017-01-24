@@ -1,4 +1,4 @@
-{
+demo = {
   
 
   entry: "./app/entry", // string | object | array
@@ -40,7 +40,7 @@
         ],
         exclude: [
             path.resolve(__dirname, "app/demo-files")
-          ]
+          ],
           // matching conditions, each accepting regular expression or string
           // test and include behave equal, both must be matched
           // exclude must not be matched (takes preferrence over test and include)

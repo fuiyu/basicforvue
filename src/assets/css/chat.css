@@ -1,0 +1,37 @@
+
+.chat-function-components, .chat-user-list{
+    height: 600px;
+}
+.chat-function-components{
+    border: 1px solid #ddd;
+}
+/*用户列表*/
+.chat-user-list{
+    overflow: hidden;
+    overflow-y: scroll;
+}
+/*聊天组件*/
+.chat-container{
+    height: 400px;
+    overflow: hidden;
+    overflow-y: scroll;
+    position: relative;
+    padding-top: 50px
+}
+.chat-container nav{
+    position: absolute;
+    width: 100%;
+    top: 0
+}
+.chat-typein{
+    height: 200px;
+    border-top: 1px solid #ccc;
+}
+.chat-typein textarea{
+    height: 150px;
+    width: 100%;
+    border: 0;
+}
+.chat-message-list{
+    height: 100%;
+}

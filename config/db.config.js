@@ -7,7 +7,8 @@ var dbConfig = {
     user: 'root',
     password: '7569823',
     port: 3306,
-    database:'nodejs'
+    database:'nodejs',
+    connectionTimeout:60000
 };
 
 module.exports = dbConfig;

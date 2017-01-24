@@ -3,24 +3,30 @@ class MysqlModel {
         this.conn = conn;
         this.table = table;
     }
-    
+
     async create(obj) {
         var _self = this;
         return new Promise(async(resolve, reject) => {
             var connection = await _self.getConnection(_self.conn)
-            connection.query(`insert into ${_self.table} SET ?`, obj, function (err, result) {
-                if (err) reject(err);
-                connection.release();
-                resolve(result);
-            });
+            var chkExist = await _self.get(obj)
+            if (chkExist.length>0) {
+                resolve('用户名已存在');
+            } else {
+                connection.query(`insert into ${_self.table} SET ?`, obj, function (err, result) {
+                    if (err) reject(err);
+                    connection.release();
+                    resolve(result);
+                });
+            }
+
         })
     }
-    
+
     async get(obj) {
         var query = `select * from  ${this.table} where `;
         var _container = []
         for (var prop in obj) {
-            _container.push(prop + '=' + obj[prop])
+            _container.push(prop + '="' + obj[prop]+'" ')
         }
         query += _container.join(' and ')
         console.log(query)
@@ -31,7 +37,7 @@ class MysqlModel {
                 if (err) reject(err);
                 connection.release();
                 resolve(rows)
-                
+
             });
         })
     }
@@ -53,7 +59,7 @@ class MysqlModel {
     // }
 
     async del(obj) {
-         var _self = this;
+        var _self = this;
         return new Promise(async(resolve, reject) => {
             var connection = await _self.getConnection(_self.conn)
             connection.query(query, obj, function (err, result) {
@@ -65,7 +71,7 @@ class MysqlModel {
     }
 
     getConnection(conn) {
-         var _self = this;
+        var _self = this;
         return new Promise((resolve, reject) => {
             conn.getConnection(function (err, connection) {
                 if (err) reject(err);

@@ -15,8 +15,8 @@ const parseMultipart = (req, opts) => new Promise((resolve, reject) => {
 })
 
 module.exports = async(req, res) => {
-    const username = req.session.username
-    if (!username) {
+    const id = req.session.id
+    if (!id) {
         return  toJson.spliceToJSON('','未登录',6001)
     }
     const tempUploadDir = joinPath(__dirname, '../upload/data/temp')
@@ -25,7 +25,7 @@ module.exports = async(req, res) => {
     })
     var tempPath = files.data[0].path;
     var tempName = files.data[0].path.replace(tempUploadDir, '');
-    console.log(files)
+    
     return {
         tempPath:tempPath,
         tempName:tempName,

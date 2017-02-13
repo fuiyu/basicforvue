@@ -1,27 +1,30 @@
 const co = require('co')
-const ws = require('ws')
+// const ws = require('ws')
+const socketServer = require('socket.io')
 const Cookies = require('cookies')
 const cookieParser = require('cookie-parser')
 const wsManager = require('./service').wsManager
+
 module.exports = (httpServer, sessionStore, keys) => {
-  const wss = ws.createServer({
-    server: httpServer
-  })
 
-  wss.on('connection', async(ws) => {
-    const cookies = new Cookies(ws.upgradeReq, null)
-    const sid = cookies.get('connect.sid').split('s%3A')[1].split('.')[0]
-    // console.log('cookies',cookies)
-    console.log(wsManager.getUser)
-    var session = await wsManager.getUser(sessionStore,sid)
-    ws.username = session.username
-    ws.on('message', (message) => {
+  const io = socketServer(httpServer)
+  io.on('connection', async(socket) => {
+    const cookies = new Cookies(socket.request, null)
 
-      wsManager.emit(ws.userId, message)
-    })
+    if (cookies.get('connect.sid')) {
+      const sid = cookies.get('connect.sid').split('s%3A')[1].split('.')[0]
+      var session = await wsManager.getUser(sessionStore, sid)
 
-    ws.on('close', () => {
-      wsManager.remove(ws.userId, ws)
-    })
+      if (session.userid) {
+        var userid = session.userid
+        socket.userid = userid
+        wsManager.put(socket.userid, socket)
+      } else {
+        socket.onclose()
+      }
+    } else {
+      socket.onclose()
+    }
+
   })
 }

@@ -5,44 +5,52 @@ class WSManager {
         // Map作用跟Object相似
         this.wsMap = new Map()
     }
-    async getUser(sessionStore,sid) {
+    async getUser(sessionStore, sid) {
         return new Promise((resolve, reject) => {
             sessionStore.get(sid, function (err, result) {
                 if (err) {
+                    console.error(err)
                     reject(err);
                 };
                 resolve(result)
             })
         })
     }
-    put(username, ws) {
-        let ary = this.wsMap[username]
-        console.log("ws", username)
+    put(username, socket) {
+        if (!!username) {
+            let ary = this.wsMap[username]
 
-        if (ary == null) {
-            ary = this.wsMap[username] = []
+            if (ary == null) {
+                ary = this.wsMap[username] = []
+            }
+            ary.push(socket)
         }
-        ary.push(ws)
     }
-    remove(username, ws) {
+    remove(username, socket) {
         let ary = this.wsMap[username]
         if (ary == null) return
-        console.log(ary)
-        let index = ary.indexOf(ws)
+
+        let index = ary.indexOf(socket)
         if (index >= 0) {
             ary.splice(index, 1)
         }
         return ary
     }
     // send(124,{})
-    send(username, message) {
-        let ary = this.wsMap[username]
-        if (ary) {
-            for (let ws of ary) {
-                ws.send(JSON.stringify(message), {
-                    mark: true
-                })
+    send(userlist, message) {
+        if (userlist.length > 0) {
+            for (var i = 0; i < userlist.length; i++　) {
+                let ary = this.wsMap[userlist[i]]
+                if (ary) {
+                    // 改redis存储可并发
+                    for (let socket of ary) {
+                        socket.emit('sendMsm', message)
+                    }
+                }
             }
+            return true
+        }else{
+            return false;
         }
     }
 }

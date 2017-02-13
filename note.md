@@ -18,6 +18,7 @@ md5.update(content);
 var sign = md5.digest('hex');
 
 ------------------------
+
 一般说来，在Web安全领域，常见的攻击方式大概有以下几种：
 1、SQL注入攻击
 2、跨站脚本攻击 - XSS
@@ -42,6 +43,7 @@ function toJSON (data = {}, message = '', code = '') {
         JSON.stringify({ data, message, code })
     }
 }
+
 -------------------
 
 
@@ -53,11 +55,21 @@ code 定义：
 4001<code<4999 错误 
 5响应超时
 6用户错误 6001 未登录
----------------------------------------
-遗留问题：websocket转化cookie的问题，与sessionid没有保持一致，需要做字符串操作
-
 
 ---------------------------------------
+
+Q&A
+Q:websocket转化cookie的问题，与sessionid没有保持一致，需要做字符串操作
+A:存储别客户端的session，session更变时(登录或退出)，同时通知服务端改变当前socket的session
+
+Q:单页客户端创建websoket实例，避免重复多个
+A:同上，同时通过store改变客户端状态
+
+Q:组件同步更新
+A:mounted挂载socket的on事件，store进行组件通信
+
+---------------------------------------
+
 vue 目录结构
 ├── index.html
 ├── main.js
@@ -73,3 +85,6 @@ vue 目录结构
     └── modules
         ├── cart.js       # 购物车模块
         └── products.js   # 产品模
+
+---------------------------------------
+

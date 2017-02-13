@@ -13,10 +13,10 @@ function getRoutes(app) {
         const rt = require('./' + name)
         app.use('/' + name, rt)
     };
-    ['user'].forEach(useRoute)
+    ['user','chat'].forEach(useRoute)
     app.post('/user/uploadAvatar', async(req, res) => {
         var temp = await upload(req, res);
-        console.log(temp)
+        
         var fileName = temp.tempName
         var qualified = /\.(jpg|jpeg|png|gif)$/.test(fileName.toLowerCase())
         if (!qualified) {

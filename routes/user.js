@@ -7,7 +7,6 @@ var md5secret = new Md5Secret();
 const ToJson = require('../utils/toJson.js')
 const toJson = new ToJson()
 
-
 router.post("/login", async(req, res) => {
     //     var body = 
     //   req.session.userid = 'fuiyu'
@@ -20,11 +19,13 @@ router.post("/login", async(req, res) => {
         
         // var result = await userModel.getIdByNickName(name)
         var result = await userModel.get({
-            'password':  md5Password 
+            "name":name,
+            "password":md5Password
         })
         var RowDataPacket = result[0]
         if (RowDataPacket) {
-            req.session.username = RowDataPacket.name
+            req.session.username = RowDataPacket.name;
+            req.session.userid =  RowDataPacket.id;
             var resResult = {};
             resResult.name = RowDataPacket.name
             res.send(toJson.spliceToJSON(resResult,"登录成功",0))
@@ -38,11 +39,12 @@ router.post("/login", async(req, res) => {
 router.get("/getinfo", async(req, res) => {
     //     var body = 
     //   req.session.userid = 'fuiyu'
-    var name = req.session.username
-    
-    if (name) {
+    var userid = req.session.userid
+        console.log(userid)
+   
+    if (userid) {
         var result = await userModel.get({
-            'name': name 
+            'id': userid 
         })
         var RowDataPacket = result[0]
         if (RowDataPacket) {
@@ -58,11 +60,11 @@ router.get("/getinfo", async(req, res) => {
 router.get("/chklogin", async(req, res) => {
     //     var body = 
     //   req.session.userid = 'fuiyu'
-    var name = req.session.username
+    var userid = req.session.userid
     
-    if (name) {
+    if (userid) {
         var result = await userModel.get({
-            'name': name 
+            'id': userid 
         })
         var RowDataPacket = result[0]
         if (RowDataPacket) {
@@ -72,10 +74,10 @@ router.get("/chklogin", async(req, res) => {
             resResult.status = "已登录"
             res.send(resResult)
         } else {
-            res.send("未登录")
+            res.send(toJson.spliceToJSON('',"未登录",6001))
         }
     }else {
-            res.send("未登录")
+            res.send(toJson.spliceToJSON('',"未登录",6001))
     }
 });
 
@@ -87,7 +89,7 @@ router.post("/register", async(req, res) => {
         md5secret.init(password, 'fuiyu')
         var md5Password = md5secret.md5()
         body.password = md5Password
-        var result = await userModel.create(body)
+        var result = await userModel.createUser(body)
         res.send(result)
     } 
 
@@ -95,8 +97,11 @@ router.post("/register", async(req, res) => {
 
 router.get("/logout", async(req, res) => {
     req.session.username = null
-    req.redirect('/#/login')
+    req.session.userid = null
+    res.redirect('/#/login')
 });
+
+
 // router.post("/getuserid", function(req, res) {
 //   // res.session.userid = 'fuiyu'
 //   console.log(req.session)

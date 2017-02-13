@@ -29,6 +29,7 @@ const sessionStore = new RedisStore({
   prefix: 'fuiyu:',
 });
 app.use(session({
+  resave: true,  //每次请求都刷新session
   store: sessionStore,
   secret: keys,
   cookie: {

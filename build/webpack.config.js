@@ -98,22 +98,8 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendors',
             filename: 'vendors.js',
+            chunks:['vue', 'vue-router','vue-resource']
         }),
-        // new HtmlWebpackPlugin({
-        //     filename: '../public/index.html',
-        //     template: path.resolve(__dirname, '../src/index.html'),
-        //     inject: true
-        // }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     },
-        //     // 排除关键字，不能混淆
-        //     except: ['$', 'exports', 'require'],
-        //     sourceMap: true
-        // }),
-        // Webpack 1.0 
-        
         new webpack.optimize.OccurenceOrderPlugin(),
         // Webpack 2.0 fixed this mispelling 
         // new webpack.optimize.OccurrenceOrderPlugin(), 

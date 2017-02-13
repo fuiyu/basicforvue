@@ -7,6 +7,13 @@ export default {
             }
         })
     },
+    register(data,cb) {
+        vm.$http.post('/user/register', data).then((response) => { 
+            if(typeof cb == 'function'){
+                cb(response)
+            }
+        })
+    },
     getUserInfo(cb){
         vm.$http.get('/user/getinfo').then((response) => { 
             if(typeof cb == 'function'){

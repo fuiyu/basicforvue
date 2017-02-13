@@ -8,13 +8,13 @@
 /*用户列表*/
 .chat-user-list{
     overflow: hidden;
-    overflow-y: scroll;
+    position: relative;
+    height: 100%;
 }
 /*聊天组件*/
 .chat-container{
     height: 400px;
     overflow: hidden;
-    overflow-y: scroll;
     position: relative;
     padding-top: 50px
 }
@@ -33,5 +33,5 @@
     border: 0;
 }
 .chat-message-list{
-    height: 100%;
+    height: 600px;
 }

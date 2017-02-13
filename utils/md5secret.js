@@ -12,7 +12,6 @@ class Md5Secret{
         var md5 = crypto.createHash('md5');
         md5.update(str);
         var token = md5.digest('hex');
-        console.log(token)
         return token;
     }
 }

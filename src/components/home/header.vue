@@ -23,28 +23,25 @@
   import store from '../../store'
   import login from '../../api/login'
   export default {
-    mounted(){
-      // this.getUserInfo()
+    mounted() {
+      var _this = this
+
+      this.$http.get('/user/getinfo').then((response) => {
+        var result = response.data, userinfo = {}
+        if (response.ok && result.code == 0) {
+          userinfo.username = result.data.name
+          userinfo.islogin = true;
+        }else{
+          userinfo.username = null;
+          userinfo.islogin = false;
+        }
+       
+        store.dispatch('getUserInfo', userinfo)
+      })
     },
     data() {
       return store.state.getUserInfo
-    },
-    // methods: {
-    //   getUserInfo() {
-    //     var data = this.user
-    //     login.getUserInfo(function (res) {
-    //       if (res.ok) {
-    //         var result = res.body
-    //         var userinfo = data
-    //         userinfo.username = result.name
-    //         userinfo.islogin = true
-    //         store.dispatch('getUserInfo', userinfo)
-    //       } else {
-
-    //       }
-
-    //     })
-    //   }
-    // }
+    }
+    
   }
 </script>

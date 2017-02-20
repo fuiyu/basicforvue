@@ -3,14 +3,20 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6 column">
-                    <form role="form">
+                    <div class="login-form">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">用户名</label><input v-model="user.username" type="text" name="username" class="form-control" placeholder="Username">
+                            <input type="text" class="form-control login-field" v-model="user.username" value="" placeholder="用户名" id="login-name">
+                            <label class="login-field-icon fui-user" for="login-name"></label>
                         </div>
+
                         <div class="form-group">
-                            <label for="exampleInputPassword1">密码</label><input v-model="user.password" type="password" name="password" class="form-control" placeholder="密码">
-                        </div><button type="button" class="btn btn-default" @click="ok">提交</button>
-                    </form>
+                            <input type="password" class="form-control login-field" v-model="user.password" value="" placeholder="密码" id="login-pass">
+                            <label class="login-field-icon fui-lock" for="login-pass"></label>
+                        </div>
+
+                        <a class="btn btn-primary btn-lg btn-block" href="#"  @click="ok">提交</a>
+                        <a class="login-link" href="/#/register">注册新账号</a>
+                    </div>
                 </div>
             </div>
         </div>

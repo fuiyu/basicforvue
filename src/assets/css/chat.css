@@ -35,3 +35,10 @@
 .chat-message-list{
     height: 600px;
 }
+
+.mine-style span{
+    color:#8BC34A
+}
+.other-style span{
+    color:#2196F3
+}

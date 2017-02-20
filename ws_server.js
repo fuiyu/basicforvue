@@ -16,9 +16,10 @@ module.exports = (httpServer, sessionStore, keys) => {
       var session = await wsManager.getUser(sessionStore, sid)
 
       if (session.userid) {
-        var userid = session.userid
-        socket.userid = userid
-        wsManager.put(socket.userid, socket)
+        var username = session.username
+        socket.username = username
+        socket.userid = session.userid
+        wsManager.put(socket.username, socket)
       } else {
         socket.onclose()
       }

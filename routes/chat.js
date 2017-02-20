@@ -29,6 +29,7 @@ async function updateUserRoomlist(roomid, idArr) {
         var result = await userModel.get({
             name: idArr[i]
         });
+        
         var roomlist = result[0].roomlist;
         roomlist = roomlist ? roomlist.split(',') : [];
         if (roomlist.indexOf(roomid + '') < 0) {
@@ -47,7 +48,6 @@ async function updateUserRoomlist(roomid, idArr) {
 router.post("/sendtouser", async(req, res) => {
     var name = req.session.username;
     var userid = req.session.userid;
-    var roomId = req.session.roomid;
     if (!userid) {
         res.send({
             code: 6001,
@@ -58,11 +58,13 @@ router.post("/sendtouser", async(req, res) => {
     var body = req.body,
         data = {},
         idArr = body.touser.split(',');
-    idArr = body.touser.split(',').sort(function (a, b) {
+    idArr = idArr.sort(function (a, b) {
         return a - b
     });
+    var roomId = body.roomid;
+    
     data.userid = userid;
-    data.message = body.message;
+    data.content = body.content;
     data.toid = body.touser;
     // roomId 未传
     if (!roomId) {
@@ -88,14 +90,14 @@ router.post("/sendtouser", async(req, res) => {
         })
         return
     }
-    var sendReult = transceiver.sendToUser(body.touser.split(','), {
+    var sendReult = transceiver.sendToUser(idArr, {
         user: name,
-        message: body.message
+        content: body.content
     })
     if (sendReult) {
         chatContentModel.create({
             roomid: roomId,
-            content: body.message,
+            content: body.content,
             user: name,
             userid: userid
         })
@@ -127,7 +129,13 @@ router.get("/getChatList", async(req, res) => {
             var resResult = {};
             resResult.code = 0;
             roomlist = RowDataPacket.roomlist;
-            resResult.list = roomlist ? roomlist.split(',') : []
+            resResult.list = []
+            roomlist = roomlist ? roomlist.split(',') : []
+            for(var i=0;i<roomlist.length;i++){
+                var roomDatas =await chatRoomModel.get({roomid: roomlist[i]})
+                resResult.list.push(roomDatas[0])
+            }
+            // resResult.list = roomlist ? roomlist.split(',') : []
             res.send(resResult)
         } else {
             res.send(toJson.spliceToJSON('', "未登录", 6001))
@@ -151,7 +159,7 @@ router.post("/getChatMembers", async(req, res) => {
             // req.session.username= RowDataPacket.name
 
             members = RowDataPacket.members.split('/');
-            if (members.indexOf(username) > 0) {
+            if (members.indexOf(username) > -1) {
                 var resResult = {};
                 resResult.code = 0;
                 resResult.members = members
@@ -169,13 +177,13 @@ router.post("/getChatMembers", async(req, res) => {
     }
 })
 
-router.get("/getChatRecords", async(req, res) => {
+router.post("/getChatRecords", async(req, res) => {
     var userid = req.session.userid,
         username = req.session.username,
         members;
 
     if (userid) {
-        var body = req.query;
+        var body = req.body;
         var result = await chatRoomModel.get({
             'roomid': body.roomid
         })
@@ -184,10 +192,10 @@ router.get("/getChatRecords", async(req, res) => {
             // req.session.username= RowDataPacket.name
 
             members = RowDataPacket.members.split('/');
-            if (members.indexOf(username) > 0) {
+            if (members.indexOf(username) > -1) {
                 var chatResult = await chatContentModel.getContentPage({
                     'roomid': body.roomid
-                },3)
+                })
                 var resResult = {};
                 resResult.code = 0;
                 resResult.total = chatResult.total;

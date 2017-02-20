@@ -36,6 +36,10 @@ class MysqlModel {
                 if (err) {
                     reject(err)
                 };
+                // if(!Array.isArray(rows)){
+                //     rows = new Array(rows)
+                // }
+
                 connection.release();
                 resolve(rows)
 

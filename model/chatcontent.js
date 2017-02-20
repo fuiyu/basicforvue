@@ -15,6 +15,7 @@ class chatContentModel extends MysqlModel {
             _param.push(obj[prop])
         }
         query += _container.join(' and ')
+        query += 'order by create_date desc ' 
         query += 'limit '+ps*(pn-1)+','+pn*ps;
         var total =await this.getCountPage(obj)
         var _self = this;

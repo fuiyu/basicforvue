@@ -38,6 +38,7 @@ class WSManager {
     }
     // send(124,{})
     send(userlist, message) {
+        console.log(userlist.length > 0)
         if (userlist.length > 0) {
             for (var i = 0; i < userlist.length; i++　) {
                 let ary = this.wsMap[userlist[i]]
